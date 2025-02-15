@@ -1,10 +1,17 @@
 document.body.addEventListener('mouseover', (e) => {
   const target = e.target;
-  if (target.nodeType === 1 && target.childNodes.length === 1 && /\d/.test(target.textContent)) {
-    const number = target.textContent.match(/\d+[kK]?/);
-    if (number) {
-      showPopover(e.pageX, e.pageY, `Число: ${number[0]}`);
+  let numbers = [];
+
+  function extractNumbers(node) {
+    if (node.nodeType === 3 || node.nodeType === 8) { // TEXT_NODE or COMMENT_NODE
+      const matches = node.textContent.match(/\d+[.,]?\d*/g);
+      if (matches) numbers.push(...matches);
     }
+  }
+
+  target.childNodes.forEach(extractNumbers);
+  if (numbers.length > 0) {
+    showPopover(e.pageX, e.pageY, `Числа: ${numbers.join(' | ')}`);
   }
 });
 
