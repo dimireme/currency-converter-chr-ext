@@ -1,0 +1,14 @@
+#number-popover {
+  position: fixed;
+  padding: 6px 12px;
+  background-color: #222;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 10000;
+  display: none;
+  opacity: 0.95;
+  transition: opacity 0.2s ease-in-out;
+}

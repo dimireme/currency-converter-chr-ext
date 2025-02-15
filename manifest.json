@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Number Hover Popover",
+  "version": "1.1",
+  "description": "Показывает поповер с числом при наведении на цифры",
+  "permissions": [],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ]
+    }
+  ]
+}
