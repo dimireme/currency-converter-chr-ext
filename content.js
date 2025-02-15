@@ -1,3 +1,18 @@
+let exchangeRates = {};
+
+async function fetchExchangeRates() {
+  try {
+    const response = await fetch('https://www.cbr-xml-daily.ru/daily_json.js');
+    const data = await response.json();
+    exchangeRates.USD = data.Valute.USD.Value;
+    exchangeRates.CNY = data.Valute.CNY.Value;
+  } catch (error) {
+    console.error('Ошибка при получении курсов валют:', error);
+  }
+}
+
+fetchExchangeRates();
+
 document.body.addEventListener('mouseover', (e) => {
   const target = e.target;
   let numbers = [];
@@ -10,8 +25,28 @@ document.body.addEventListener('mouseover', (e) => {
   }
 
   target.childNodes.forEach(extractNumbers);
-  if (numbers.length > 0) {
-    showPopover(e.pageX, e.pageY, `Числа: ${numbers.join(' | ')}`);
+
+  if (numbers.length > 0 && exchangeRates.USD && exchangeRates.CNY) {
+    const conversions = numbers.map(num => {
+      const value = parseFloat(num.replace(',', '.'));
+
+      const rubToUsd = (value / exchangeRates.USD).toFixed(2);
+      const rubToCny = (value / exchangeRates.CNY).toFixed(2);
+
+      const usdToRub = (value * exchangeRates.USD).toFixed(2);
+      const usdToCny = (value * exchangeRates.USD / exchangeRates.CNY).toFixed(2);
+
+      const cnyToUsd = (value * exchangeRates.CNY / exchangeRates.USD).toFixed(2);
+      const cnyToRub = (value * exchangeRates.CNY).toFixed(2);
+
+      return `${value}$ = ${usdToRub}₽ = ${usdToCny}¥
+${value}₽ = ${rubToUsd}$ = ${rubToCny}¥
+${value}¥ = ${cnyToUsd}$ = ${cnyToRub}₽
+====================
+`;
+    }).join('');
+
+    showPopover(e.pageX, e.pageY, conversions);
   }
 });
 

@@ -11,4 +11,6 @@
   display: none;
   opacity: 0.95;
   transition: opacity 0.2s ease-in-out;
+  white-space: pre;
+    font-family: monospace;
 }
